@@ -20,7 +20,6 @@ C:\Users\Administrator\Desktop\Code\HMSX.MFG.Mobile.Business.PlugIn\obj\Debug\HM
 C:\Users\Administrator\Desktop\Code\HMSX.MFG.Mobile.Business.PlugIn\obj\Debug\HMSX.MFG.Mobile.Business.PlugIn.dll
 C:\Users\Administrator\Desktop\Code\HMSX.MFG.Mobile.Business.PlugIn\obj\Debug\HMSX.MFG.Mobile.Business.PlugIn.pdb
 C:\Users\Administrator\Desktop\Code\HMSX.MFG.Mobile.Business.PlugIn\obj\Debug\HMSX.MFG.Mobile.Business.PlugIn.csproj.AssemblyReference.cache
-D:\开发\HMSX_Project\Code\HMSX.MFG.Mobile.Business.PlugIn\obj\Debug\HMSX.MFG.Mobile.Business.PlugIn.csproj.AssemblyReference.cache
 D:\开发\HMSX_Project\Code\HMSX.MFG.Mobile.Business.PlugIn\obj\Debug\HMSX.MFG.Mobile.Business.PlugIn.csproj.CoreCompileInputs.cache
 D:\开发\HMSX_Project\Code\HMSX.MFG.Mobile.Business.PlugIn\obj\Debug\HMSX.MFG.Mobile.Business.PlugIn.csproj.CopyComplete
 D:\开发\HMSX_Project\Code\HMSX.MFG.Mobile.Business.PlugIn\obj\Debug\HMSX.MFG.Mobile.Business.PlugIn.dll
