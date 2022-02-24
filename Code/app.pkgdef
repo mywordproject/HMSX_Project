@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<AssemblyModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Id>3978edc8-ce21-4b12-8e7b-29b3f5d32ef0</Id>
+  <MasterId>K3Cloud</MasterId>
+  <Name>程序集包</Name>
+  <Developer>
+    <Id>RUJP</Id>
+    <DevCode>RUJP</DevCode>
+    <Level>1</Level>
+    <Name>RUJP</Name>
+  </Developer>
+  <RequiredPackages />
+  <ExclusivePackages />
+  <IsSuperPkg>false</IsSuperPkg>
+  <IncludedExtended>false</IncludedExtended>
+  <DevPhase>Unknown</DevPhase>
+  <CanBeStopped>false</CanBeStopped>
+  <DeployEdition>ALL</DeployEdition>
+  <PatchType>ALL</PatchType>
+  <Deploy>Business</Deploy>
+  <PackageCategory>FuncPackage</PackageCategory>
+  <IsReplace>true</IsReplace>
+  <LocaleId>0</LocaleId>
+  <Issues />
+  <Links />
+  <PreInstallMsg />
+  <AfterInstallMsg />
+  <PlugIns />
+  <KDServices>
+    <DataEntities />
+    <Contracts />
+    <ServiceHelpers />
+    <AppServices />
+    <Resources />
+  </KDServices>
+  <OtherComponents />
+  <TestPlugIns />
+  <Resources />
+  <BusinessPlugIns>
+    <KDComponent xsi:type="DotNetProjectComponent">
+      <Target>CompileAndPackage</Target>
+      <Name>HMSX.MFG.Mobile.Business.PlugIn.csproj</Name>
+      <ComponentPath>HMSX.MFG.Mobile.Business.PlugIn\HMSX.MFG.Mobile.Business.PlugIn.csproj</ComponentPath>
+      <Type>Assembly</Type>
+      <OpeType>AddOrUpdate</OpeType>
+      <IsSign>false</IsSign>
+      <IsIgnoreError>false</IsIgnoreError>
+      <OutputPath>Bin</OutputPath>
+      <Condition />
+      <OutputAssemblyFile>HMSX.MFG.Mobile.Business.PlugIn.dll</OutputAssemblyFile>
+      <GenerateManifests>false</GenerateManifests>
+      <ReferencePaths>
+        <string>..\..\K3Cloud\BIN</string>
+      </ReferencePaths>
+      <TargetPlatform />
+      <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+      <OtherOutputResources />
+      <SmartAssembly>false</SmartAssembly>
+      <Verbosity>quiet</Verbosity>
+      <FailRetryTime>0</FailRetryTime>
+    </KDComponent>
+  </BusinessPlugIns>
+</AssemblyModel>
