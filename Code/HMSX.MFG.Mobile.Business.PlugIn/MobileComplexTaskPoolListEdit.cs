@@ -163,7 +163,7 @@ namespace HMSX.MFG.Mobile.Business.PlugIn
             DynamicObjectCollection rs = DBServiceHelper.ExecuteDynamicObject(this.Context, strSql);
             if (rs.Count > 0)
             {
-                // lot :作业号+物料编码+当前日期+3位流水号
+                // lot :作业号+物料编码+当前日期+3位流水号111111
                 //20211102001
                 string strLot;
                 if (rs[0]["F_LOT_Text"] != null)
