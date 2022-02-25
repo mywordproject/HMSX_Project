@@ -171,19 +171,14 @@ namespace HMSX.MFG.Mobile.Business.PlugIn
         {
             if (ScanText != "")
             {
-               // string strSql = string.Format(@"/*dialect*/select FMoBillNo,FMOSEQ,concat(FMoBillNo,'-',FMOSEQ) as FMoNumber,FOptPlanNo,t3.FName as FProcess,FOperNumber,FSEQNUMBER, 
-               //                                                 concat(FOptPlanNo,'-',FSEQNUMBER,'-',FOperNumber) as OptPlanNo,t.FMaterialId,t2.FNAME as FMaterialName,t1.F_LOT_Text,t1.FWORKQTY,t1.FEntryId,t1.FBARCODE  
-               //                                                 from T_SFC_DISPATCHDETAIL t inner join T_SFC_DISPATCHDETAILENTRY t1 
-              //                                                  on t.FID=t1.FID and t.FOperId=(select FDETAILID from T_SFC_OPERPLANNINGDETAIL where FBarCode='{0}')   
-              //                                                   AND t1.FENTRYID NOT IN  (select cast(substring(F_RUJP_PgEntryId,charindex(',',F_RUJP_PgEntryId)+1,len(F_RUJP_PgEntryId))As int) from T_PRD_PICKMTRLDATA where  F_RUJP_PgEntryId<>'') 
-              //                                                 left join T_BD_MATERIAL_L t2 on t.FMATERIALID = t2.FMATERIALID and t2.FLOCALEID = 2052  
-              //                                                 left join T_ENG_PROCESS_L t3 on t.FPROCESSID=t3.FID and t3.FLOCALEID = 2052", ScanText);
+               
                 string strSql = string.Format(@"/*dialect*/select FMoBillNo,FMOSEQ,concat(FMoBillNo,'-',FMOSEQ) as FMoNumber,FOptPlanNo,t3.FName as FProcess,FOperNumber,FSEQNUMBER, 
                                                                 concat(FOptPlanNo,'-',FSEQNUMBER,'-',FOperNumber) as OptPlanNo,t.FMaterialId,t2.FNAME as FMaterialName,t1.F_LOT_Text,t1.FWORKQTY,t1.FEntryId,t1.FBARCODE  
                                                                 from T_SFC_DISPATCHDETAIL t inner join T_SFC_DISPATCHDETAILENTRY t1 
                                                                 on t.FID=t1.FID and t.FOperId=(select FDETAILID from T_SFC_OPERPLANNINGDETAIL where FBarCode='{0}')   
                                                                  AND t1.FENTRYID NOT IN  (select  FPgEntryId from(select FPgEntryId,sum(FMustQty) as FMustQty,sum(FPickQty) as FPickQty  from t_PgBomInfo Group by FPgEntryId) a where a.FMustQty-a.FPickQty<=0) 
-                                                               left join T_BD_MATERIAL_L t2 on t.FMATERIALID = t2.FMATERIALID and t2.FLOCALEID = 2052  
+                                                               AND T1.FSTATUS='B' 
+                                                                left join T_BD_MATERIAL_L t2 on t.FMATERIALID = t2.FMATERIALID and t2.FLOCALEID = 2052  
                                                                left join T_ENG_PROCESS_L t3 on t.FPROCESSID=t3.FID and t3.FLOCALEID = 2052", ScanText);
                 DynamicObjectCollection rs = DBServiceHelper.ExecuteDynamicObject(this.Context, strSql);
                 if (rs.Count > 0)

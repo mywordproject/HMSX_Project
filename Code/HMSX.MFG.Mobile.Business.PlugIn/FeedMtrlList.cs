@@ -143,7 +143,9 @@ namespace HMSX.MFG.Mobile.Business.PlugIn
                                                                 concat(FOptPlanNo,'-',FSEQNUMBER,'-',FOperNumber) as OptPlanNo,t.FMaterialId,t2.FNAME as FMaterialName,t1.F_LOT_Text,t1.FWORKQTY,t1.FEntryId,t1.FBARCODE  
                                                                 from T_SFC_DISPATCHDETAIL t inner join T_SFC_DISPATCHDETAILENTRY t1 
                                                                 on t.FID=t1.FID and t.FOperId=(select FDETAILID from T_SFC_OPERPLANNINGDETAIL where FBarCode='{0}')  
-                                                               left join T_BD_MATERIAL_L t2 on t.FMATERIALID = t2.FMATERIALID and t2.FLOCALEID = 2052  
+                                                                AND t1.FENTRYID  IN  (select  FPgEntryId from(select FPgEntryId,sum(FPickQty) as FPickQty  from t_PgBomInfo Group by FPgEntryId) a where a.FPickQty>0)  
+                                                                 AND t1.FSTATUS='B'  
+                                                                left join T_BD_MATERIAL_L t2 on t.FMATERIALID = t2.FMATERIALID and t2.FLOCALEID = 2052  
                                                                left join T_ENG_PROCESS_L t3 on t.FPROCESSID=t3.FID and t3.FLOCALEID = 2052", ScanText);
                 DynamicObjectCollection rs = DBServiceHelper.ExecuteDynamicObject(this.Context, strSql);
                 if (rs.Count > 0)

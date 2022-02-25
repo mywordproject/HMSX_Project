@@ -246,6 +246,7 @@ namespace HMSX.MFG.Mobile.Business.PlugIn
                     obj1["AppQty"] = num;
                     obj1["StockAppQty"] = num;
                     obj1["StockActualQty"] = num;
+                    obj1["BaseStockActualQty"] = num;
                     obj1["ActualQty"] = num;
                     obj1["BaseAppQty"] = num;
                     obj1["BaseActualQty"] = num;

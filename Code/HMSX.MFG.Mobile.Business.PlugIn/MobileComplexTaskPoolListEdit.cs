@@ -30,29 +30,12 @@ using Kingdee.BOS.Orm.Metadata.DataEntity;
 using Kingdee.BOS.Mobile;
 using Kingdee.BOS.Mobile.PlugIn;
 using System.ComponentModel;
-
-
-using Kingdee.BOS.Core.DynamicForm;
-using Kingdee.BOS.Core.DynamicForm.PlugIn.ControlModel;
-using Kingdee.BOS.Core.NetworkCtrl;
-using Kingdee.BOS.Core.Validation;
-using Kingdee.BOS.JSON;
-using Kingdee.BOS.Orm;
-using Kingdee.BOS.Util;
-using Kingdee.K3.BD.ServiceHelper;
-using Kingdee.K3.Core.BD;
-using Kingdee.K3.Core.BD.ServiceArgs;
-using Kingdee.K3.Core.MFG.EntityHelper;
-using Kingdee.K3.MFG.Mobile.ServiceHelper;
-using Kingdee.K3.MFG.Mobile.ServiceHelper.SFC;
-using System.Text;
 using Kingdee.BOS.App.Data;
+using Kingdee.BOS.Core.DynamicForm;
 
 namespace HMSX.MFG.Mobile.Business.PlugIn
 {
     [Description("工序任务超市-表单插件")]
-    //热启动,不用重启IIS
-    [Kingdee.BOS.Util.HotUpdate]
     public class MobileComplexTaskPoolListEdit : ComplexTaskPoolList
     {
 
@@ -61,53 +44,11 @@ namespace HMSX.MFG.Mobile.Business.PlugIn
         protected long  userOrgId;
         protected long  masterId;
 
-        /// <summary>
-        /// 加载字段对应数据源
-        /// </summary>
-        protected override void PrepareDispDetailBindFields(Dictionary<string, string> dicFieldLabelKeys)
-        {
-            base.PrepareDispDetailBindFields(dicFieldLabelKeys);
-            DataUtils.AddDicFieldLabel(dicFieldLabelKeys, "F_RUJP_Lot");//批号字段
-
-        }
-        protected override void PrepareDicTableData(System.Collections.Generic.IEnumerable<Kingdee.BOS.Orm.DataEntity.DynamicObject> datas, System.Collections.Generic.Dictionary<int, System.Collections.Generic.Dictionary<string, object>> dicTableData)
-        {
-            base.PrepareDicTableData(datas, dicTableData);           
-        }
-
 
         public override void ButtonClick(ButtonClickEventArgs e)
         {
             base.ButtonClick(e);
             string key;
-            //领料时，判断批号是否为空、派工明细是否有存在相同批号
-            if(e.Key.ToUpper()== "FBUTTON_CONFIRM")
-            {
-                if (this.Model.GetValue("FLot").ToString() == null)
-                {
-                    base.View.ShowMessage(ResManager.LoadKDString("批号不允许为空！", "015747000026506", SubSystemType.MFG, new object[0]), MessageBoxType.Notice);
-                    e.Cancel = true;
-                    return;
-                }
-                else
-                {
-                    Dictionary<string, object> currentRowData = this.GetCurrentRowData();            
-                    string malnumber= currentRowData["FProductId"].ToString().Substring(0, currentRowData["FProductId"].ToString().IndexOf("/"));
-                    //查询派工明细
-                    string cxsql = $@" 
-                    select * from T_SFC_DISPATCHDETAIL a
-                    inner join T_SFC_DISPATCHDETAILENTRY b on a.FID=b.FID
-                    inner join T_BD_Material c on a.fmaterialid=c.fmaterialid
-                    where c.fnumber= '{malnumber}' and F_RUJP_Lot='{this.Model.GetValue("FLot").ToString()}'";
-                    var cx = DBUtils.ExecuteDynamicObject(Context, cxsql);
-                    if (cx.Count > 0)
-                    {
-                        base.View.ShowMessage(ResManager.LoadKDString("该批号在派工明细已存在！", "015747000026506", SubSystemType.MFG, new object[0]), MessageBoxType.Notice);
-                        e.Cancel = true;
-                        return;
-                    }
-                }
-            }
             switch (key = e.Key.ToUpper())
             {
                 case "FBUTTON_PREVIOUS":
@@ -124,9 +65,36 @@ namespace HMSX.MFG.Mobile.Business.PlugIn
                     this.Model.DataObject["FMouldId_Id"] = null;
                     this.View.Model.SetValue("FMouldId", 0);
                     return;
+                case "FBUTTON_CONFIRM":
+                    if (this.Model.GetValue("FLot").ToString() == null)
+                    {
+                        base.View.ShowMessage(ResManager.LoadKDString("批号不允许为空！", "015747000026506", SubSystemType.MFG, new object[0]), MessageBoxType.Notice);
+                        e.Cancel = true;
+                        return;
+                    }
+                    else
+                    {
+                        Dictionary<string, object> currentRowData = this.GetCurrentRowData();
+                        string malnumber = currentRowData["FProductId"].ToString().Substring(0, currentRowData["FProductId"].ToString().IndexOf("/"));
+                        string cxsql = $@" 
+                    select * from T_SFC_DISPATCHDETAIL a
+                    inner join T_SFC_DISPATCHDETAILENTRY b on a.FID=b.FID
+                    inner join T_BD_Material c on a.fmaterialid=c.fmaterialid
+                    where c.fnumber= '{malnumber}' and F_RUJP_Lot='{this.Model.GetValue("FLot").ToString()}'";
+                        var cx = DBUtils.ExecuteDynamicObject(Context, cxsql);
+                        if (cx.Count > 0)
+                        {
+                            base.View.ShowMessage(ResManager.LoadKDString("该批号在派工明细已存在！", "015747000026506", SubSystemType.MFG, new object[0]), MessageBoxType.Notice);
+                            e.Cancel = true;
+                            return;
+                        }
+                    }
+                    return;
             }
-
         }
+
+     
+          
         public override void EntityRowDoubleClick(EntityRowClickEventArgs e)
         {
             base.EntityRowDoubleClick(e);
@@ -134,6 +102,7 @@ namespace HMSX.MFG.Mobile.Business.PlugIn
             {
                 this.SetLotinfo();
                 this.SetMouldIdInfo();
+                this.setMinPackCount();
                 return;
             }
           
@@ -147,6 +116,7 @@ namespace HMSX.MFG.Mobile.Business.PlugIn
                 {
                     this.SetLotinfo();
                     this.SetMouldIdInfo();
+                    this.setMinPackCount();
                     return;
                 }
             }
@@ -162,12 +132,11 @@ namespace HMSX.MFG.Mobile.Business.PlugIn
             userOrgId = GetOrgId(optPlanOptId);
             DynamicObject obj = GetOptplan(optPlanOptId);
             materialId = Convert.ToInt64(obj["ProductId_Id"]);
-            string strSql = string.Format(@"/*dialect*/select top 1  t1.FentryId,t1.F_LOT_Text from T_SFC_DISPATCHDETAIL t inner join T_SFC_DISPATCHDETAILENTRY
-                          t1 on t.FID=t1.FID and  DATEDIFF ( YEAR , cast('{0}' as datetime) , t1.FDISPATCHTIME )=0  and FMATERIALID={1} order by t1.FentryId desc", today, materialId);
+            string strSql = string.Format(@"/*dialect*/select top 1  t1.FentryId,t1.F_LOT_Text from T_SFC_DISPATCHDETAIL t inner join T_SFC_DISPATCHDETAILENTRY t1 on t.FID=t1.FID and  DATEDIFF ( YEAR , cast('{0}' as datetime) , t1.FDISPATCHTIME )=0  and FMATERIALID={1} order by t1.FentryId desc", today, materialId);
             DynamicObjectCollection rs = DBServiceHelper.ExecuteDynamicObject(this.Context, strSql);
             if (rs.Count > 0)
             {
-                // lot :作业号+物料编码+当前日期+3位流水号111111
+                // lot :作业号+物料编码+当前日期+3位流水号
                 //20211102001
                 string strLot;
                 if (rs[0]["F_LOT_Text"] != null)
@@ -210,6 +179,18 @@ namespace HMSX.MFG.Mobile.Business.PlugIn
             }
         }
 
+        private void setMinPackCount()
+        {
+            Dictionary<string, object> currentRowData = this.GetCurrentRowData();
+            optPlanOptId = Convert.ToInt64(currentRowData["OperId"]);
+            DynamicObject obj = GetOptplan(optPlanOptId);
+            materialId = Convert.ToInt64(obj["ProductId_Id"]);
+            string strSql = string.Format(@"select FMinPackCount from T_BD_MATERIALPURCHASE where FMATERIALID={0}", materialId);
+           DynamicObjectCollection rs= DBServiceHelper.ExecuteDynamicObject(this.Context, strSql);
+            decimal minPackcount = Convert.ToDecimal(rs[0]["FMinPackCount"]);
+            this.View.Model.SetValue("F_RUJP_Qty", minPackcount);
+            this.View.UpdateView("F_RUJP_Qty");
+        }
         public string CreateLot(string lot)
         {
             var today = DateTime.Today.ToString("yyyyMMdd");
@@ -247,8 +228,6 @@ namespace HMSX.MFG.Mobile.Business.PlugIn
             return userOrgId;
         }
 
-       
-      
         protected override DynamicObject CreateDispatchDetailData()
         {
             DynamicObject obj = base.CreateDispatchDetailData();
@@ -283,7 +262,6 @@ namespace HMSX.MFG.Mobile.Business.PlugIn
             }
             return obj;
         }
-
         public override void BeforeF7Select(BeforeF7SelectEventArgs e)
         {
             base.BeforeF7Select(e);
@@ -363,6 +341,11 @@ namespace HMSX.MFG.Mobile.Business.PlugIn
             return masterId;
         }
 
-       
+        protected override void PrepareDispDetailBindFields(Dictionary<string, string> dicFieldLabelKeys)
+        {
+            base.PrepareDispDetailBindFields(dicFieldLabelKeys);
+            DataUtils.AddDicFieldLabel(dicFieldLabelKeys, "F_RUJP_Lot");
+
+        }
     }
 }

@@ -130,6 +130,7 @@ namespace HMSX.MFG.Mobile.Business.PlugIn
                     this.View.Model.SetValue("FMaterialName", ppBomInfo[i]["FNAME"].ToString(), i);
                     this.View.Model.SetValue("FLot", ppBomInfo[i]["FLOT_TEXT"].ToString(), i);
                     this.View.Model.SetValue("FMustQty", ppBomInfo[i]["FPickQty"].ToString(), i);
+                    this.View.Model.SetValue("FQty", ppBomInfo[i]["FPickQty"].ToString(), i);
                     this.View.Model.SetValue("FBaseUnitID", ppBomInfo[i]["FBASEUNITID"], i);
                     this.View.Model.SetValue("FPpBomEntryId", ppBomInfo[i]["FENTRYID"].ToString(), i);
                     this.View.Model.SetValue("FStockId", ppBomInfo[i]["FSTOCKID"].ToString(), i);
@@ -176,7 +177,6 @@ namespace HMSX.MFG.Mobile.Business.PlugIn
                     }
                 }
 
-
                 if (listReturninfo != null)
                 {
                     //this.View.Model.DeleteEntryData("F_SBID_MobileListViewEntity");
@@ -192,6 +192,7 @@ namespace HMSX.MFG.Mobile.Business.PlugIn
                         this.View.Model.SetValue("FModel", listReturninfo[i].Model, rowCount - 1);
                         this.View.Model.SetValue("FLot", listReturninfo[i].lot, rowCount - 1);
                         this.View.Model.SetValue("FMustQty", listReturninfo[i].PickQty, rowCount - 1);
+                        this.View.Model.SetValue("FQty", listReturninfo[i].PickQty, rowCount - 1); 
                         this.View.Model.SetValue("FBaseUnitID", listReturninfo[i].baseUnitId, rowCount - 1);
                         this.View.Model.SetValue("FPpBomEntryId", listReturninfo[i].pbomEntryId, rowCount - 1);
                         this.View.Model.SetValue("FPgEntryId", listReturninfo[i].pgEntryId, rowCount - 1);
@@ -274,6 +275,7 @@ namespace HMSX.MFG.Mobile.Business.PlugIn
                                 obj1["AppQty"] = num;
                                 obj1["StockAppQty"] = num;
                                 obj1["StockQty"] = num;
+                                obj1["BaseStockQty"] = num;
                                 obj1["Qty"] = num;
                                 obj1["BaseAppQty"] = num;
                                 obj1["BaseQty"] = num;
