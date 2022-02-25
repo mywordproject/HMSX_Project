@@ -36,6 +36,7 @@ using Kingdee.BOS.Core.DynamicForm;
 namespace HMSX.MFG.Mobile.Business.PlugIn
 {
     [Description("工序任务超市-表单插件")]
+    [Kingdee.BOS.Util.HotUpdate]
     public class MobileComplexTaskPoolListEdit : ComplexTaskPoolList
     {
 
@@ -66,7 +67,7 @@ namespace HMSX.MFG.Mobile.Business.PlugIn
                     this.View.Model.SetValue("FMouldId", 0);
                     return;
                 case "FBUTTON_CONFIRM":
-                    if (this.Model.GetValue("FLot").ToString() == null)
+                    if (this.Model.GetValue("FLot").ToString() == "" || this.Model.GetValue("FLot").ToString() == null)
                     {
                         base.View.ShowMessage(ResManager.LoadKDString("批号不允许为空！", "015747000026506", SubSystemType.MFG, new object[0]), MessageBoxType.Notice);
                         e.Cancel = true;
