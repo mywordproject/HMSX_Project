@@ -74,8 +74,10 @@ namespace HMSX.MFG.Mobile.Business.PlugIn
                     }
                     else
                     {
+                        //获取选择行信息
                         Dictionary<string, object> currentRowData = this.GetCurrentRowData();
                         string malnumber = currentRowData["FProductId"].ToString().Substring(0, currentRowData["FProductId"].ToString().IndexOf("/"));
+                        //查询派工明细是否存在相同批号
                         string cxsql = $@" 
                     select * from T_SFC_DISPATCHDETAIL a
                     inner join T_SFC_DISPATCHDETAILENTRY b on a.FID=b.FID
@@ -340,7 +342,11 @@ namespace HMSX.MFG.Mobile.Business.PlugIn
             });
             return masterId;
         }
-
+        /// <summary>
+        /// 强制解析，获取数据源
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
         protected override void PrepareDispDetailBindFields(Dictionary<string, string> dicFieldLabelKeys)
         {
             base.PrepareDispDetailBindFields(dicFieldLabelKeys);
