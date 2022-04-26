@@ -1,7 +1,0 @@
-D:\开发\HMSX_Project\HMSX\HMSX\obj\Debug\HMSX.csproj.AssemblyReference.cache
-D:\开发\HMSX_Project\HMSX\HMSX\obj\Debug\HMSX.csproj.CoreCompileInputs.cache
-F:\program\WebSite\bin\HMSX.dll
-F:\program\WebSite\bin\HMSX.pdb
-D:\开发\HMSX_Project\HMSX\HMSX\obj\Debug\HMSX.csproj.CopyComplete
-D:\开发\HMSX_Project\HMSX\HMSX\obj\Debug\HMSX.dll
-D:\开发\HMSX_Project\HMSX\HMSX\obj\Debug\HMSX.pdb

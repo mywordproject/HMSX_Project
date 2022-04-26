@@ -19,3 +19,4 @@ D:\开发\HMSX_Project\Code\HMSX.MFG.Mobile.Business.PlugIn\obj\Debug\HMSX.MFG.M
 D:\开发\HMSX_Project\Code\HMSX.MFG.Mobile.Business.PlugIn\obj\Debug\HMSX.MFG.Mobile.Business.PlugIn.csproj.CopyComplete
 D:\开发\HMSX_Project\Code\HMSX.MFG.Mobile.Business.PlugIn\obj\Debug\HMSX.MFG.Mobile.Business.PlugIn.dll
 D:\开发\HMSX_Project\Code\HMSX.MFG.Mobile.Business.PlugIn\obj\Debug\HMSX.MFG.Mobile.Business.PlugIn.pdb
+D:\开发\HMSX_Project\Code\HMSX.MFG.Mobile.Business.PlugIn\obj\Debug\HMSX.MFG.Mobile.Business.PlugIn.csproj.AssemblyReference.cache
