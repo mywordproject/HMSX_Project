@@ -1,4 +1,5 @@
 ﻿using Kingdee.BOS;
+using Kingdee.BOS.App.Data;
 using Kingdee.BOS.Core.Bill.PlugIn;
 using Kingdee.BOS.Core.CommonFilter;
 using Kingdee.BOS.Core.DynamicForm;
@@ -52,7 +53,12 @@ namespace HMSX.Second.Plugin.生产制造
                         {
                             DynamicObjectDataRow datarow = (DynamicObjectDataRow)listSelectedRowCollection[0].DataRow;
                             var fbillno = datarow.DynamicObject["FBILLNO"].ToString();
+                            string cxsql = $@"select FARRIVALDATE from T_PUR_ReqEntry where FENTRYID={datarow.DynamicObject["t1_FENTRYID"]}";
+                            var cx = DBUtils.ExecuteDynamicObject(Context, cxsql);
+                            DateTime dhrq =Convert.ToDateTime(cx[0]["FARRIVALDATE"].ToString());
                             this.View.Model.SetValue("FCGSQDDH", fbillno, e.Row);
+                            this.View.Model.SetValue("F_260_YCLYJDHRQ", dhrq, e.Row);
+
                         }
                     }
                 });

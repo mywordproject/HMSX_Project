@@ -30,7 +30,7 @@ namespace HMSX.Second.Plugin.生产制造
         public override void BeforeExecuteOperationTransaction(BeforeExecuteOperationTransaction e)
         {
             base.BeforeExecuteOperationTransaction(e);
-            if (FormOperation.Operation.Equals("Audit", StringComparison.OrdinalIgnoreCase))
+            if (FormOperation.Operation.Equals("Save", StringComparison.OrdinalIgnoreCase))
             {
                 foreach (ExtendedDataEntity extended in e.SelectedRows)
                 {
@@ -45,7 +45,7 @@ namespace HMSX.Second.Plugin.生产制造
                             var cx = DBUtils.ExecuteDynamicObject(Context, cxsql);
                             if (cx.Count > 0)
                             {
-                                if (Convert.ToDouble(entry["ActualQty"].ToString()) > Convert.ToDouble(cx[0]["QTY"].ToString()))
+                                if ( (Convert.ToDouble(cx[0]["QTY"].ToString())- Convert.ToDouble(entry["ActualQty"].ToString()))<-0.01)
                                 {
                                     throw new KDBusinessException("", "超额领料！");
                                 }

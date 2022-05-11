@@ -294,6 +294,7 @@ namespace HMSX.Second.Plugin.批号追溯
                 this.View.Model.SetItemValueByID("F_260_CK", Convert.ToInt32(date["CK"]), xh);
                 this.View.Model.SetItemValueByID("F_260_KCZT", Convert.ToInt32(date["KCZT"]), xh);
                 this.View.Model.SetItemValueByID("F_260_SCCJ", Convert.ToInt32(date["SCCJ"]), xh);
+                this.View.Model.SetValue("F_260_KHBQ", date["KHBQ"]==null? "":date["KHBQ"].ToString(), xh);
                 this.View.Model.SetItemValueByID("F_260_DCCK", date["DCCK"].ToString() == "" ? 0 : Convert.ToInt32(date["DCCK"]), xh);
                 xh++;
             }

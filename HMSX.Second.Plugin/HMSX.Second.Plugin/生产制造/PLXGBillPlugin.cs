@@ -25,13 +25,17 @@ namespace HMSX.Second.Plugin.生产制造
                 String syjc = this.Model.GetValue("F_260_SYJC") == null ? "" : this.Model.GetValue("F_260_SYJC").ToString();
                 string bhg = this.Model.GetValue("F_260_BHG") == null ? "" : this.Model.GetValue("F_260_BHG").ToString();
                 string jyjg = this.Model.GetValue("F_260_JYJG") == null ? "" : this.Model.GetValue("F_260_JYJG").ToString();
-                string[] rs = new string[4];
+                string zt = this.Model.GetValue("F_260_ZT") == null ? "" : this.Model.GetValue("F_260_ZT").ToString();
+                string zjy = this.Model.GetValue("F_260_ZJY") == null ? "" :((DynamicObject)this.Model.GetValue("F_260_ZJY"))["Id"].ToString();
+                string[] rs = new string[6];
                 if (zd != "" )
                 {
                     rs[0] = zd;
                     rs[1] = syjc;
                     rs[2] = bhg;
-                    rs[3] = jyjg;                
+                    rs[3] = jyjg;
+                    rs[4] = zt;
+                    rs[5] = zjy;
                     this.View.ReturnToParentWindow(rs);
                     this.View.Close();
                 }

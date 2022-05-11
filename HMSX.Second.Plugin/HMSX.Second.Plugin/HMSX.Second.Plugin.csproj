@@ -34,6 +34,10 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="HMSX.MFG.Mobile.Business.PlugIn, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>F:\program\WebSite\bin\HMSX.MFG.Mobile.Business.PlugIn.dll</HintPath>
+    </Reference>
     <Reference Include="Kingdee.BOS, Version=7.7.2388.8, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>F:\program\WebSite\bin\Kingdee.BOS.dll</HintPath>
@@ -161,7 +165,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MES\FXBGBillPlugin.cs" />
+    <Compile Include="MES\GXRWCS.cs" />
     <Compile Include="MES\PGGXBGModilPlugin.cs" />
+    <Compile Include="PCTRCCLBillPlugin.cs" />
     <Compile Include="人人报销\CCSQBillPlugin.cs" />
     <Compile Include="供应链\KCXTZHBillPlugin.cs" />
     <Compile Include="生产制造\BLServerPlugin.cs" />
@@ -182,6 +188,7 @@
     <Compile Include="基础资料\WLQDServerPlugin.cs" />
     <Compile Include="基础资料\WLServerPlugin.cs" />
     <Compile Include="YCLListPlugin.cs" />
+    <Compile Include="生产制造\GXHBServerPlugin.cs" />
     <Compile Include="生产制造\JYDBillPlugin.cs" />
     <Compile Include="生产制造\JYDListPlugin.cs" />
     <Compile Include="生产制造\JYDServerPlugin.cs" />

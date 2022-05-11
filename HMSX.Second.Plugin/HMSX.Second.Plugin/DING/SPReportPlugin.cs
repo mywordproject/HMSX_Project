@@ -358,16 +358,30 @@ namespace HMSX.Second.Plugin.DING
                 var sjys = DBUtils.ExecuteDynamicObject(Context, sjysql);
                 foreach(var sjy in sjys)
                 {
-                    string clrsql = $@"exec Pro_bm '{sjy["FQRGH"].ToString()}'";
-                    var clr = DBUtils.ExecuteDynamicObject(Context, clrsql);
-                    string zrbm = clr.Count == 0 ? "" : clr[0]["部门"].ToString();//责任部门
+                    // string clrsql = $@"exec Pro_bm '{sjy["FQRGH"].ToString()}'";
+                    //string clrsql = $@"SELECT FNAME FROM T_BD_DEPARTMENT_L WHERE FDEPTID=[SX_DataAdapt].dbo.getBM(16139100)";
+                   // var clr = DBUtils.ExecuteDynamicObject(Context, clrsql);
+                   // string zrbm = clr.Count == 0 ? "" : clr[0]["部门"].ToString();//责任部门
 
                     string fqr = "";
+                   string zrbm = "";
+                   string zrbmsql = $@"select c.FNAME 姓名,FRYLB,d.FDEPTID,e.FNAME 部门,f.FNAME 上级部门 from T_HR_EMPINFO a
+                                    inner join T_BD_STAFFTEMP b on a.FID=b.FID 
+                                    inner join T_HR_EMPINFO_L c on a.FID=c.FID 
+                                    inner join T_BD_DEPARTMENT d on d.FDEPTID=b.FDEPTID
+                                    inner join T_BD_DEPARTMENT_L e on d.FDEPTID=e.FDEPTID
+                                    left join T_BD_DEPARTMENT_L f on d.FPARENTID=f.FDEPTID
+                                    where FISFIRSTPOST=1 and a.FNUMBER='{sjy["FQRGH"].ToString()}'";
+                   var bmid = DBUtils.ExecuteDynamicObject(Context, zrbmsql);
+                    string clrsql = $@"/*dialect*/SELECT FNAME FROM T_BD_DEPARTMENT_L WHERE FDEPTID=[SX_DataAdapt].dbo.getBM({Convert.ToInt32( bmid[0]["FDEPTID"].ToString())})";
+                  //  string clrsql = $@"/*dialect*/SELECT FNAME FROM T_BD_DEPARTMENT_L WHERE FDEPTID=dbo.getBM({Convert.ToInt32(bmid[0]["FDEPTID"].ToString())})";
+                   var clr = DBUtils.ExecuteDynamicObject(Context, clrsql);
+                   zrbm = clr.Count == 0 ? "" : clr[0]["FNAME"].ToString();//责任部门
                     if (sjy["FQR"] != null)
                     {
                         namereq.Userid = sjy["FQR"].ToString();
                         OapiV2UserGetResponse fqrs = Nameclient.Execute(namereq, access_token);
-                        fqr = fqrs.Result == null ? "" : fqrs.Result.Name;//发起人
+                        fqr = fqrs.Result == null ? "" : fqrs.Result.Name;//发起人                      
                     }
                     this.Model.CreateNewEntryRow("F_SLSB_Entity");
                     this.Model.SetValue("F_260_SPBH", sjy["SPBH"].ToString(), hs);

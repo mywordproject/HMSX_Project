@@ -33,28 +33,28 @@ namespace HMSX.Second.Plugin.生产制造
                     throw new KDBusinessException("", "请选择需要批量修改的行！");
                 }
 
-                DynamicObjectCollection dycoll = this.ListModel.GetData(listcoll);
-                for (int i = 0; i < dycoll.Count; i++)
+                foreach (var list in listcoll) 
                 {
-                    if (dycoll[i]["FINSPECTORGID"].ToString()!="100026")
+
+                    if (list.DataRow["FINSPECTORGID"].ToString()!="100026")
                     {
                         return;
                     }
-                    if (dycoll[i]["FDOCUMENTSTATUS"].ToString()=="C" )
+                    if (list.DataRow["FDOCUMENTSTATUS"].ToString()=="C" )
                     {
-                        throw new KDBusinessException("", "单据状态不能已审核！");
+                        throw new KDBusinessException("", "批量修改，单据状态不能为已审核！");
                     }
                    
                 }
                 DynamicFormShowParameter parameter = new DynamicFormShowParameter();
                 parameter.OpenStyle.ShowType = ShowType.Floating;
-                parameter.FormId = "SLSB_PLXG";
+                parameter.FormId = "PAEZ_PLXG";//PAEZ_PLXG正式；SLSB_PLXG测试
                 parameter.MultiSelect = false;
                 //获取返回的值
                 this.View.ShowForm(parameter, delegate (FormResult result)
                 {
                 string[] date = (string[])result.ReturnData;
-                    if (date != null && date[0]=="1")
+                    if (date != null && date[0] == "1")
                     {
                         foreach (string key in listKey)
                         {
@@ -81,7 +81,7 @@ namespace HMSX.Second.Plugin.生产制造
                                 string fdidsql = $@"SELECT FDetailID FROM T_QM_IBPOLICYDETAIL WHERE FENTRYID='{key}'";
                                 var fdid = DBUtils.ExecuteDynamicObject(Context, fdidsql);
 
-                                string insertsql = $@"insert into T_QM_IBPOLICYDETAIL_L values({Convert.ToInt32(pkid[0]["FPKID"].ToString())+1},{Convert.ToInt32(fdid[0]["FDETAILID"].ToString())},2052,'{date[3]}')";
+                                string insertsql = $@"insert into T_QM_IBPOLICYDETAIL_L values({Convert.ToInt32(pkid[0]["FPKID"].ToString()) + 1},{Convert.ToInt32(fdid[0]["FDETAILID"].ToString())},2052,'{date[3]}')";
                                 DBUtils.Execute(Context, insertsql);
                             }
                         }
@@ -91,11 +91,25 @@ namespace HMSX.Second.Plugin.生产制造
                     {
                         foreach (string key in listKey)
                         {
-                            string upsql = $@"update T_QM_IBPOLICYDETAIL set FUSEPOLICY='{date[1]}' where FENTRYID={key}";
+                            string upsql = $@"update T_QM_IBPOLICYDETAIL set FUSEPOLICY='{date[1]}',FSTATUS='{date[4]}' where FENTRYID={key}";
                             DBUtils.ExecuteDynamicObject(Context, upsql);
+
+                            string upsql1 = $@"update T_QM_INSPECTBILLENTRY_A set FINSPECTRESULT='{date[4]}' where FENTRYID={key}";
+                            DBUtils.ExecuteDynamicObject(Context, upsql1);
                         }
                         this.View.ShowMessage("批量修改成功！");
-                    }                  
+                    }
+                    else if (date != null && date[0] == "4")
+                    {
+                        foreach (var list in listcoll)
+                        {
+                            string upsql1 = $@"update T_QM_INSPECTBILL set FINSPECTORID='{date[5]}' where FBILLNO='{list.DataRow["FBILLNO"].ToString()}'";
+                            DBUtils.ExecuteDynamicObject(Context, upsql1);
+                         
+                        }
+                        this.View.ShowMessage("批量修改成功！");
+                    }
+
                 });
             }
         }

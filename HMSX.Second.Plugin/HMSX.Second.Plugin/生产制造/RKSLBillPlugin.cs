@@ -74,6 +74,23 @@ namespace HMSX.Second.Plugin
             }
 
         }
-       
+        public override void AfterExecuteOperationTransaction(AfterExecuteOperationTransaction e)
+        {
+            base.AfterExecuteOperationTransaction(e);
+            if(FormOperation.Operation.Equals("Audit", StringComparison.OrdinalIgnoreCase)|| FormOperation.Operation.Equals("UnAudit", StringComparison.OrdinalIgnoreCase))
+            {
+                foreach (var date in e.DataEntitys)
+                {
+                    foreach (var entry  in date["Entity"] as DynamicObjectCollection)
+                    {
+                        string upsql = $@"/*dialect*/update T_SFC_OPTRPTENTRY set F_260_CYS=FFINISHQTY-FSTOCKINQUAAUXQTY from T_SFC_OPTRPTENTRY_A
+                        where T_SFC_OPTRPTENTRY.FENTRYID=T_SFC_OPTRPTENTRY_A.FENTRYID AND T_SFC_OPTRPTENTRY.FID IN (SELECT FID FROM T_SFC_OPTRPT where FBILLNO='{entry["SrcBillNo"].ToString()}') 
+						and T_SFC_OPTRPTENTRY.FSEQ='{entry["SrcEntrySeq"].ToString()}'";
+                        DBUtils.Execute(Context, upsql);
+                    }
+                }
+            }
+        }
+
     }
 }
